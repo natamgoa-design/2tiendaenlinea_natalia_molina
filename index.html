@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi tienda</title>
+  <style>
+    /* ===== Paleta ===== */
+    :root {
+      --rojo: #e30613;
+      --rojo-oscuro: #b8040f;
+      --rojo-claro: #ff4753;      /* para texto sobre fondo negro */
+      --negro: #111;
+      --carbon: #1d1d1d;
+      --gris-linea: #333;
+      --texto: #181818;
+      --texto-suave: #5c5c5c;
+      --pelota: #d7e84a;
+      --sombra-roja: 227, 6, 19;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: "Barlow", Arial, Helvetica, sans-serif;
+      font-size: 17px;
+      line-height: 1.5;
+      background: linear-gradient(135deg, #f7f7f7 0%, #ffffff 55%, #ffe9eb 100%) fixed;
+      color: var(--texto);
+      padding: 25px;
+      margin: 0;
+      text-align: center;
+    }
+
+    /* ===== NOMBRE ===== */
+
+    h1 {
+      font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      color: var(--rojo);
+      margin: 0 0 4px;
+      font-size: clamp(2.8rem, 10vw, 5rem);
+      font-weight: 900;
+      font-style: italic;
+      line-height: 1;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 3px 3px 0 var(--negro);
+    }
+
+    .slogan {
+      color: #333;
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+      font-weight: 600;
+      margin: 8px 0 30px;
+    }
+
+    /* ===== BENEFICIOS ===== */
+
+    .beneficios {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      background: var(--negro);
+      color: #fff;
+
+      padding: 14px 18px;
+      margin: 0 auto 38px;
+
+      border-radius: 50px;
+      border-bottom: 4px solid var(--rojo);   /* detalle de línea de cancha */
+      max-width: 900px;
+
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .beneficios span {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 16px;
+      background: #2a2a2a;
+      border-radius: 30px;
+      white-space: nowrap;
+    }
+
+    /* ===== CATÁLOGO ===== */
+
+    #productos {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 26px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ===== PRODUCTOS ===== */
+
+    .producto {
+      position: relative;
+      display: flex;
+      flex-direction: column;     /* botones siempre alineados abajo */
+      overflow: hidden;
+
+      border: 3px solid transparent;
+      background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, var(--rojo), var(--negro)) border-box;
+
+      border-radius: 20px;
+      padding: 16px;
+      width: 230px;
+      text-align: left;
+
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    /* Franja roja diagonal en la esquina */
+    .producto::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 22px;
+      width: 14px;
+      height: 46px;
+      background: var(--rojo);
+      transform: skewX(-18deg);
+      z-index: 1;
+    }
+
+    .producto:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 30px rgba(var(--sombra-roja), 0.22);
+    }
+
+    .producto img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #eee;
+    }
+
+    .producto h3 {
+      margin: 14px 0 6px;
+      font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .descripcion {
+      font-size: 15px;
+      color: var(--texto-suave);
+      min-height: 44px;
+      margin: 0 0 8px;
+    }
+
+    .precio {
+      font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--rojo);
+      margin: 0 0 6px;
+    }
+
+    /* ===== BOTONES (base compartida) ===== */
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: transform 0.2s ease, background 0.2s ease,
+                  box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    button:focus-visible {
+      outline: 3px solid var(--pelota);
+      outline-offset: 3px;
+    }
+
+    button:active { transform: scale(0.97); }
+
+    /* Botón de cada producto */
+
+    .producto button {
+      margin-top: auto;
+      background: var(--rojo);
+      border: none;
+      color: #fff;
+
+      padding: 12px 18px;
+
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .producto button:hover {
+      background: var(--negro);
+      transform: scale(1.04);
+    }
+
+    .producto button:focus-visible { outline-color: var(--negro); }
+
+    /* ===== CARRITO ===== */
+
+    .carrito {
+      position: relative;
+      overflow: hidden;
+      margin-top: 45px;
+      padding: 26px 26px 26px 36px;
+
+      background: var(--negro);
+      color: #fff;
+
+      border-radius: 22px;
+
+      text-align: left;
+      display: inline-block;
+      width: 100%;
+      max-width: 440px;
+
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    /* Franja roja lateral */
+    .carrito::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -8px;
+      width: 20px;
+      background: var(--rojo);
+      transform: skewX(-12deg);
+    }
+
+    .carrito h2 {
+      margin: 0 0 12px;
+      font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      font-style: italic;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    #lista-carrito {
+      padding-left: 20px;
+    }
+
+    #lista-carrito li {
+      margin-bottom: 8px;
+    }
+
+    .resumen {
+      border-top: 2px solid var(--gris-linea);
+      margin-top: 15px;
+      padding-top: 12px;
+    }
+
+    .total {
+      font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--rojo-claro);
+    }
+
+    /* ===== BOTÓN VACIAR ===== */
+
+    .vaciar {
+      background: transparent;
+      border: 2px solid #fff;
+      color: #fff;
+
+      padding: 10px 16px;
+      margin-top: 10px;
+
+      font-weight: 700;
+    }
+
+    .vaciar:hover {
+      background: #fff;
+      color: var(--negro);
+    }
+
+    /* ===== BOTÓN FINALIZAR ===== */
+
+    .finalizar {
+      background: var(--rojo);
+      border: none;
+      color: #fff;
+
+      padding: 12px 20px;
+      margin-top: 10px;
+      margin-left: 5px;
+
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      box-shadow: 0 5px 15px rgba(var(--sombra-roja), 0.4);
+    }
+
+    .finalizar:hover {
+      background: var(--rojo-oscuro);
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    /* ===== CELULAR ===== */
+
+    @media (max-width: 520px) {
+      body { padding: 16px; }
+
+      .beneficios { border-radius: 24px; padding: 12px; }
+      .beneficios span { white-space: normal; }
+
+      .producto { width: 100%; max-width: 320px; }
+
+      .carrito { padding: 22px 18px 22px 30px; }
+      .finalizar { margin-left: 0; }
+    }
+
+    /* ===== REDUCIR MOVIMIENTO ===== */
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WilsonServe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800;1,900&family=Barlow:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rojo: #e30613;
+      --negro: #111;
+      --blanco: #fff;
+      --pelota: #d7e84a;
+      --texto: #333;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--blanco);
+      font-family: "Barlow", Arial, sans-serif;
+    }
+
+    .hero-tenis {
+      position: relative;
+      overflow: hidden;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 28px 40px;
+      background: #f6f6f4;
+      border-radius: 6px;
+    }
+
+    /* Franja roja diagonal, como una línea de cancha */
+    .hero-tenis::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -40px;
+      width: 26px;
+      background: var(--rojo);
+      transform: skewX(-18deg);
+    }
+
+    .hero-tenis::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 8px;
+      background: var(--negro);
+      transform: skewX(-18deg);
+    }
+
+    .contenido {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-left: 24px;
+    }
+
+    .pelota {
+      flex: none;
+      width: clamp(52px, 9vw, 76px);
+      height: auto;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+      font-size: clamp(2.6rem, 9vw, 4.8rem);
+      font-weight: 900;
+      font-style: italic;
+      line-height: 1;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--rojo);
+    }
+
+    h1 span { color: var(--negro); }
+
+    .slogan {
+      margin: 10px 0 0;
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+      font-weight: 500;
+      color: var(--texto);
+    }
+
+    /* Línea de cancha bajo el texto */
+    .linea-cancha {
+      position: relative;
+      margin: 28px 0 0 24px;
+      height: 2px;
+      background: var(--negro);
+    }
+
+    .linea-cancha::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: -6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--pelota);
+      border: 2px solid var(--negro);
+    }
+
+    @media (max-width: 480px) {
+      .hero-tenis { padding: 36px 18px 32px; }
+      .contenido { gap: 12px; padding-left: 16px; }
+      .linea-cancha { margin-left: 16px; }
+    }
+  </style>
+  </head>
+  <body>
+
+  <header class="hero-tenis">
+    <div class="contenido">
+      <svg class="pelota" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" fill="#d7e84a" stroke="#111" stroke-width="2"/>
+        <path d="M8 14C22 20 24 44 8 50" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        <path d="M56 14C42 20 40 44 56 50" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+
+      <div>
+        <h1>Wilson<span>Serve</span></h1>
+        <p class="slogan">Todo para tu próximo punto.</p>
+      </div>
+    </div>
+
+    <div class="linea-cancha" aria-hidden="true"></div>
+  </header>
+
+  </body>
+  </html>
+
+  <div class="beneficios">
+    <span>🚚 Envíos en Bogotá</span>
+    <span>🔒 Compra segura</span>
+    <span>📦 Seguimiento de pedido</span>
+  </div>
+
+  <div id="productos"></div>
+
+  <div class="carrito">
+    <h2>🧾 Carrito de Compras</h2>
+
+    <ul id="lista-carrito"></ul>
+
+    <div class="resumen">
+      <p>
+        Envío: <strong>Gratis</strong>
+      </p>
+
+      <p class="total">
+        Total: $<span id="total">0</span>
+      </p>
+    </div>
+
+    <button class="vaciar" onclick="vaciarCarrito()">
+      🧼 Vaciar Carrito
+    </button>
+
+    <button class="finalizar" onclick="finalizarCompra()">
+      ✅ Finalizar Compra
+    </button>
+  </div>
+
+  <script>
+    const productos = [
+      {
+        id: 1,
+        nombre: "Wilson Blade 98",
+        descripcion: "Raqueta orientada a jugadores avanzados que buscan control.",
+        precio: 25000,
+        imagen: "https://wilsonstore.com.co/wp-content/uploads/2024/05/64f57681e7f6dd11f39f8e30_thumbnail.png"
+      },
+      {
+        id: 2,
+        nombre: " Wilson Clash 100",
+        descripcion: "Raqueta versátil para jugadores de nivel intermedio.",
+        precio: 18000,
+        imagen: "https://wilsonstore.com.co/wp-content/uploads/2025/02/6702eb02ae55261721231e5b_thumbnail.png"
+      },
+      {
+        id: 3,
+        nombre: "Wilson Pro Staff 97",
+        descripcion: "Raqueta para jugadores que priorizan precisión y sensaciones.",
+        precio: 30000,
+        imagen: "https://wilsonstore.com.co/wp-content/uploads/2026/02/68bfcb2f25a22abea0e13f4a_thumbnail.webp"
+      },
+      {
+        id: 4,
+        nombre: "Wilson US Open Pink Jumbo Ball",
+        descripcion: "Pelota gigante edición especial del US Open. Ideal para decorar, coleccionar o conseguir autógrafos. 🩷",
+        precio: 18000,
+        imagen: "https://www.wilson.com/en-us/media/catalog/product/article_images/WR8218901_/WR8218901__96aa9d78103b380b9198adf9a0b929a7.png?auto=webp&quality=95&crop=false&fit=cover&orient=1&format=pjpg&optimize=high&enable=upscale&width=1057&height=1292&canvas=9%3A11&bg-color=F3F1EDg"
+      },
+      {
+        id: 5,
+        nombre: "Wilson Super Tour 9 Pack",
+        descripcion: "Bolso para transportar raquetas y accesorios.",
+        precio: 22000,
+        imagen: "https://wilsonstore.com.co/wp-content/uploads/2024/05/60132869894f820500b48577_thumbnail.jpg"
+      }
+    ];
+
+
+    /* ==============================
+       CARRITO
+    ================================ */
+
+    const carrito = [];
+
+    const contenedorProductos = document.getElementById("productos");
+    const listaCarrito = document.getElementById("lista-carrito");
+    const totalCarrito = document.getElementById("total");
+
+
+    /* ==============================
+       MOSTRAR PRODUCTOS
+    ================================ */
+
+    function mostrarProductos() {
+
+      contenedorProductos.innerHTML = "";
+
+      productos.forEach(prod => {
+
+        const div = document.createElement("div");
+
+        div.className = "producto";
+
+        div.innerHTML = `
+          <img src="${prod.imagen}" alt="${prod.nombre}">
+
+          <h3>${prod.nombre}</h3>
+
+          <p class="descripcion">
+            ${prod.descripcion}
+          </p>
+
+          <p class="precio">
+            ${prod.precio.toLocaleString("es-CO", {
+              style: "currency",
+              currency: "COP",
+              minimumFractionDigits: 0
+            })}
+          </p>
+
+          <button onclick="agregarAlCarrito(${prod.id})">
+            Agregar al carrito
+          </button>
+        `;
+
+        contenedorProductos.appendChild(div);
+
+      });
+
+    }
+
+
+    /* ==============================
+       AGREGAR AL CARRITO
+    ================================ */
+
+    function agregarAlCarrito(id) {
+
+      const productoExistente =
+        carrito.find(p => p.id === id);
+
+      if (productoExistente) {
+
+        productoExistente.cantidad++;
+
+      } else {
+
+        const producto =
+          productos.find(p => p.id === id);
+
+        carrito.push({
+          ...producto,
+          cantidad: 1
+        });
+
+      }
+
+      actualizarCarrito();
+
+    }
+
+
+    /* ==============================
+       ACTUALIZAR CARRITO
+    ================================ */
+
+    function actualizarCarrito() {
+
+      listaCarrito.innerHTML = "";
+
+      let total = 0;
+      let totalItems = 0;
+
+      carrito.forEach(item => {
+
+        const li =
+          document.createElement("li");
+
+        const subtotal =
+          item.precio * item.cantidad;
+
+        li.textContent =
+          `${item.nombre} x${item.cantidad} — ` +
+          subtotal.toLocaleString("es-CO", {
+            style: "currency",
+            currency: "COP",
+            minimumFractionDigits: 0
+          });
+
+        listaCarrito.appendChild(li);
+
+        total += subtotal;
+        totalItems += item.cantidad;
+
+      });
+
+      totalCarrito.textContent =
+        total.toLocaleString("es-CO");
+
+      actualizarTituloCarrito(totalItems);
+
+    }
+
+
+    /* ==============================
+       CONTADOR DEL CARRITO
+    ================================ */
+
+    function actualizarTituloCarrito(cantidad) {
+
+      const titulo =
+        document.querySelector(".carrito h2");
+
+      titulo.textContent =
+        `🧾 Carrito de Compras (${cantidad})`;
+
+    }
+
+
+    /* ==============================
+       VACIAR CARRITO
+    ================================ */
+
+    function vaciarCarrito() {
+
+      if (carrito.length === 0) {
+
+        alert("🛒 El carrito ya está vacío.");
+
+        return;
+
+      }
+
+      if (
+        confirm(
+          "¿Estás seguro de que quieres vaciar el carrito?"
+        )
+      ) {
+
+        carrito.length = 0;
+
+        actualizarCarrito();
+
+      }
+
+    }
+
+
+    /* ==============================
+       FINALIZAR COMPRA
+    ================================ */
+
+    function finalizarCompra() {
+
+      if (carrito.length === 0) {
+
+        alert(
+          "🛒 Tu carrito está vacío. Agrega productos antes de finalizar la compra."
+        );
+
+        return;
+
+      }
+
+      alert(
+        "🎉 ¡Pedido simulado confirmado!\n\n" +
+        "En un eCommerce real, ahora entrarían en acción " +
+        "el backend, la pasarela de pago y la logística."
+      );
+
+      carrito.length = 0;
+
+      actualizarCarrito();
+
+    }
+
+
+    /* ==============================
+       INICIAR TIENDA
+    ================================ */
+
+    mostrarProductos();
+  </script>
+</body>
+</html>
